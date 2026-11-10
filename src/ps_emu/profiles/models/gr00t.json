@@ -1,0 +1,22 @@
+{
+  "schema": "policy_server_emulator.model.v1",
+  "id": "gr00t",
+  "checkpoint_revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495",
+  "handshake": {"embodiment_tag": "OXE_DROID_RELATIVE_EEF_RELATIVE_JOINT", "action_horizon": 40, "image_resolution": [180, 320], "needs_session_id": true, "action_keys": ["eef_9d", "gripper_position", "joint_position"]},
+  "observation": {"fields": [
+    {"path": ["video", "exterior_image_1_left"], "kind": "ndarray", "dtype": "uint8", "shape": [1, 2, null, null, 3]},
+    {"path": ["video", "wrist_image_left"], "kind": "ndarray", "dtype": "uint8", "shape": [1, 2, null, null, 3]},
+    {"path": ["state", "eef_9d"], "kind": "ndarray", "dtype": "float32", "shape": [1, 1, 9], "finite": true},
+    {"path": ["state", "gripper_position"], "kind": "ndarray", "dtype": "float32", "shape": [1, 1, 1], "finite": true},
+    {"path": ["state", "joint_position"], "kind": "ndarray", "dtype": "float32", "shape": [1, 1, 7], "finite": true},
+    {"path": ["prompt"], "kind": "string", "nonempty_after_strip": true}
+  ]},
+  "response": {"kind": "mapping", "exact_keys": true, "fields": {
+    "eef_9d": {"kind": "ndarray", "dtype": "float32", "shape": [1, 40, 9], "time_axis": 1, "finite": true},
+    "gripper_position": {"kind": "ndarray", "dtype": "float32", "shape": [1, 40, 1], "time_axis": 1, "finite": true, "generator": {"offset": 0.2}},
+    "joint_position": {"kind": "ndarray", "dtype": "float32", "shape": [1, 40, 7], "time_axis": 1, "finite": true, "generator": {"offset": 0.3}}
+  }},
+  "generator": {"kind": "deterministic_pattern_v1", "identity_inputs": ["session_id", "request_id", "session_sequence"], "state_paths": [["state", "eef_9d"], ["state", "gripper_position"], ["state", "joint_position"]], "amplitude": 0.05, "offset": 0.0, "row_stride": 0.0001, "dimension_stride": 0.00001},
+  "sampling_parameters": {"fields": [], "unknown_fields": "reject"},
+  "features": {}
+}

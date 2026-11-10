@@ -1,0 +1,8 @@
+schema = "policy_server_emulator.faults.v1"
+service_delay_combination = "max_once_v1"
+
+[[rules]]
+session_id = "*"
+request_sequence = 0
+kind = "status_freeze"
+delay_ms = 400

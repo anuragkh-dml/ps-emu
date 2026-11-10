@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ps-emu"
+version = "0.1.0"
+description = "CPU-only emulator for the vLLM-Omni policy server protocol"
+requires-python = ">=3.12"
+dependencies = ["numpy>=2,<3", "msgpack>=1,<2", "websockets>=16,<17"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.14,<1"]
+
+[project.scripts]
+ps-emu = "ps_emu.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ps_emu = ["profiles/*.toml", "profiles/*.json", "profiles/**/*.json", "profiles/**/*.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "unit: isolated deterministic behavior and serialization",
+    "integration: bounded local process, thread, or socket checks",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]

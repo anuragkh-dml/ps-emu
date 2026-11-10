@@ -1,0 +1,9 @@
+{
+  "schema": "policy_server_emulator.observations.v1",
+  "generator": "numpy_uniform_pool_v1",
+  "seed": 0,
+  "source_rate_hz": 10,
+  "duration_s": 180,
+  "pool_size": 4,
+  "prompt": "Move the object to the target."
+}
