@@ -1,0 +1,6 @@
+{
+  "schema": "policy_server_emulator.hardware.v1",
+  "id": "synthetic",
+  "device_kind": "synthetic",
+  "device_count": 1
+}

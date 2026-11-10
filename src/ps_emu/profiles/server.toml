@@ -1,0 +1,50 @@
+schema = "policy_server_emulator.execution.v1"
+model_profile = "models/pi05.json"
+hardware_profile = "hardware/synthetic.json"
+service_profile = "service/fixed.json"
+fault_profile = ""
+
+[transport]
+host = "127.0.0.1"
+port = 8000
+path = "/v1/realtime/robot/openpi"
+compression = "none"
+ping_interval_s = 20
+max_connections = 16
+max_frame_bytes = 67108864
+receive_queue_capacity = 1
+idle_timeout_s = 30
+max_sessions_per_connection = 1024
+
+[scheduler]
+policy = "fifo_collect_v1"
+max_pending_requests = 64
+max_pending_bytes = 268435456
+max_batch_size = 1
+batch_wait_ms = 0
+active_batches = 1
+cancellation_policy = "finish_active_discard_reply_v1"
+
+[service]
+sampling = "fixed"
+seed = 0
+scale = 1.0
+
+[features]
+rtc_enabled = false
+cohort_enabled = false
+
+[cohort]
+wire_schema = "vllm_omni.cohort.v1"
+policy_id = ""
+max_registered_epochs = 65536
+
+[lifecycle]
+readiness_timeout_s = 5
+shutdown_grace_s = 2
+
+[evidence]
+status_interval_ms = 10
+recent_event_capacity = 256
+writer_queue_capacity = 4096
+flush_interval_ms = 10

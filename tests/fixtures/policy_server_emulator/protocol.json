@@ -1,0 +1,94 @@
+{
+  "schema": "policy_server_emulator.protocol_fixtures.v1",
+  "reference_repository": "https://github.com/anuragkh-dml/vllm-omni",
+  "reference_revision": "ada3335c866d4b6b82925ce1d19c89226e3df3ee",
+  "provenance": "Manually reviewed wire markers and cohort registry rules from the pinned production source; no model execution or timing evidence.",
+  "frames": [
+    {
+      "name": "little_endian_float32",
+      "hex": "84c40b5f5f6e6461727261795f5fc3c40464617461c4080000803f000020c0c4056474797065a33c6634c4057368617065920102",
+      "shape": [
+        1,
+        2
+      ],
+      "dtype": "float32",
+      "values": [
+        [
+          1.0,
+          -2.5
+        ]
+      ]
+    }
+  ],
+  "membership": [
+    {
+      "member_ids": [
+        "a",
+        "b"
+      ],
+      "sha256": "0473ef2dc0d324ab659d3580c1134e9d812035905c4781fdd6d529b0c6860e13"
+    },
+    {
+      "member_ids": [
+        "b",
+        "a"
+      ],
+      "sha256": "0473ef2dc0d324ab659d3580c1134e9d812035905c4781fdd6d529b0c6860e13"
+    },
+    {
+      "member_ids": [
+        "robot-α",
+        "robot-β"
+      ],
+      "sha256": "2272762a2cc29474fc6e69e86ae5de54e57ce872b47c6f937b7a4635740ad206"
+    }
+  ],
+  "registry_sequences": [
+    {
+      "steps": [
+        {
+          "epoch": "first",
+          "member": "a"
+        },
+        {
+          "epoch": "second",
+          "member": "a"
+        },
+        {
+          "epoch": "first",
+          "member": "b"
+        },
+        {
+          "epoch": "second",
+          "member": "b"
+        }
+      ],
+      "accepted": [
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "steps": [
+        {
+          "epoch": "first",
+          "member": "a"
+        },
+        {
+          "uncoordinated": true
+        },
+        {
+          "epoch": "first",
+          "member": "b"
+        }
+      ],
+      "accepted": [
+        true,
+        true,
+        false
+      ]
+    }
+  ]
+}

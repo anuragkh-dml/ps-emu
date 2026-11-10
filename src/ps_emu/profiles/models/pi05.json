@@ -1,0 +1,32 @@
+{
+  "schema": "policy_server_emulator.model.v1",
+  "id": "pi05",
+  "checkpoint_revision": "22c30e5b34f9e7ab738b1b34fc2fc5ecfe2d28f0",
+  "handshake": {
+    "action_space": "joint_position",
+    "action_horizon": 50,
+    "action_dim": 32,
+    "image_resolution": [224, 224],
+    "n_external_cameras": 1,
+    "needs_wrist_camera": true
+  },
+  "observation": {"fields": [
+    {"path": ["observation.images.base_0_rgb"], "kind": "ndarray", "dtype": "uint8", "shape": [null, null, 3]},
+    {"path": ["observation.images.left_wrist_0_rgb"], "kind": "ndarray", "dtype": "uint8", "shape": [null, null, 3]},
+    {"path": ["state"], "kind": "ndarray", "dtype": "float32", "shape": [32], "finite": true},
+    {"path": ["prompt"], "kind": "string", "nonempty_after_strip": true}
+  ]},
+  "response": {"kind": "ndarray", "dtype": "float32", "shape": [50, 32], "time_axis": 0, "finite": true},
+  "generator": {"kind": "deterministic_pattern_v1", "identity_inputs": ["session_id", "request_id", "session_sequence"], "state_paths": [["state"]], "amplitude": 0.05, "offset": 0.0, "row_stride": 0.0001, "dimension_stride": 0.00001},
+  "sampling_parameters": {"fields": [], "unknown_fields": "reject"},
+  "features": {
+    "guided_rtc_v1": {
+      "handshake": {"rtc": {"schema_version": 1, "modes": ["guided"], "model_action_space": "normalized", "prefix_attention_schedules": ["linear", "exp", "ones", "zeros"]}},
+      "action_horizon": 50,
+      "action_dim": 32,
+      "schedules": ["linear", "exp", "ones", "zeros"],
+      "request": {"path": ["sampling_params", "rtc"], "fields": ["schema_version", "mode", "previous_actions", "inference_delay", "execution_horizon", "prefix_attention_schedule", "max_guidance_weight", "correlation"], "previous_actions_dtype": "float32", "previous_actions_shape": [50, 32]},
+      "response": {"actions_path": ["actions"], "model_actions_path": ["model_actions"], "metadata_path": ["rtc"], "schema_version": 1, "mode": "guided", "model_space_generator": {"offset": 0.1}}
+    }
+  }
+}

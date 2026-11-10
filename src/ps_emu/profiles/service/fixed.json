@@ -1,0 +1,9 @@
+{
+  "schema": "policy_server_emulator.service_profile.v1",
+  "kind": "fixed",
+  "source_kind": "synthetic_fixture",
+  "binding": "synthetic_unbound",
+  "timing_basis": "scheduler_active_interval",
+  "units": "ns",
+  "active_ns_by_batch_size": {"1": 100000000, "2": 145000000, "3": 190000000, "4": 235000000}
+}
