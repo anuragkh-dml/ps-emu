@@ -7,15 +7,15 @@ from importlib.metadata import PackageNotFoundError, distribution
 from pathlib import Path
 import re
 import subprocess
-from urllib.parse import unquote, urlsplit
 
 
 def source_identity() -> dict[str, str | bool | None]:
     """Return package version and any independently verifiable source commit.
 
-    Editable installs are inspected in their checkout. PEP 610 VCS metadata is
-    used for immutable VCS installs. Ordinary wheels correctly report no source
-    SHA because the wheel alone cannot prove which source tree produced it.
+    Editable installs are inspected in their loaded ``src/ps_emu`` checkout,
+    including editable installs whose PEP 610 URL has a VCS scheme. PEP 610 VCS
+    metadata is used for immutable VCS installs. Ordinary wheels correctly
+    report no source SHA because the wheel alone cannot prove its source tree.
     """
     try:
         dist = distribution("ps-emu")
@@ -34,32 +34,49 @@ def source_identity() -> dict[str, str | bool | None]:
     commit = vcs.get("commit_id")
     if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
         commit = None
-    url = urlsplit(direct.get("url", ""))
     dir_info = direct.get("dir_info", {})
-    root: Path | None = None
-    if url.scheme == "file" and dir_info.get("editable") is True:
-        root = Path(unquote(url.path))
-    if root is not None:
+    if dir_info.get("editable") is True:
         package = Path(__file__).resolve().parent
+        root = package.parent.parent if package.parent.name == "src" else None
         dirty: bool | None = None
-        try:
-            found = subprocess.run(
-                ["git", "rev-parse", "HEAD"], cwd=root, check=True,
-                capture_output=True, text=True,
-            ).stdout.strip()
-            status = subprocess.run(
-                ["git", "status", "--porcelain", "--untracked-files=normal"],
-                cwd=root, check=True, capture_output=True, text=True,
-            ).stdout
-            dirty = bool(status)
-            if re.fullmatch(r"[0-9a-f]{40}", found):
-                commit = found
-            for installed in package.rglob("*.py"):
-                source = root / "src" / "ps_emu" / installed.relative_to(package)
-                if not source.is_file() or source.read_bytes() != installed.read_bytes():
-                    dirty = True
-                    break
-        except (OSError, subprocess.CalledProcessError):
+        verified = root is not None and (root / "src" / "ps_emu").resolve() == package
+        if verified:
+            try:
+                top_level = subprocess.run(
+                    ["git", "rev-parse", "--show-toplevel"], cwd=root, check=True,
+                    capture_output=True, text=True,
+                ).stdout.strip()
+                if Path(top_level).resolve() != root.resolve():
+                    verified = False
+            except (OSError, subprocess.CalledProcessError):
+                verified = False
+        if verified:
+            try:
+                assert root is not None
+                found = subprocess.run(
+                    ["git", "rev-parse", "HEAD"], cwd=root, check=True,
+                    capture_output=True, text=True,
+                ).stdout.strip()
+                status = subprocess.run(
+                    ["git", "status", "--porcelain", "--untracked-files=normal"],
+                    cwd=root, check=True, capture_output=True, text=True,
+                ).stdout
+                dirty = bool(status)
+                if re.fullmatch(r"[0-9a-f]{40}", found):
+                    commit = found
+                else:
+                    commit = None
+                    dirty = None
+                for installed in package.rglob("*.py"):
+                    source = root / "src" / "ps_emu" / installed.relative_to(package)
+                    if not source.is_file() or source.read_bytes() != installed.read_bytes():
+                        dirty = True
+                        break
+            except (OSError, subprocess.CalledProcessError):
+                commit = None
+                dirty = None
+        else:
+            commit = None
             dirty = None
         return {
             "package_name": "ps-emu",
