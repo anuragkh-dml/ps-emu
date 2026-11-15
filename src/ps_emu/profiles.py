@@ -377,7 +377,7 @@ def load_service_profile(path: str | Path) -> ServiceProfile:
             "hardware_profile_sha256",
             "hardware_id",
             "source_configuration_sha256",
-            "source_route_configuration_sha256",
+            "source_admission_group_configuration_sha256",
             "source_execution_projection",
             "sources",
             "samples_by_batch_size",
@@ -396,7 +396,7 @@ def load_service_profile(path: str | Path) -> ServiceProfile:
             "model_profile_sha256",
             "hardware_profile_sha256",
             "source_configuration_sha256",
-            "source_route_configuration_sha256",
+            "source_admission_group_configuration_sha256",
         ):
             if not isinstance(data[key], str) or not re.fullmatch(r"[0-9a-f]{64}", data[key]):
                 raise ValueError(f"{key} must be a SHA-256 hex digest")

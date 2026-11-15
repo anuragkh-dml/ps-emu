@@ -89,7 +89,7 @@ def test_empirical_sample_selection_is_stable_and_size_scoped(tmp_path: Path) ->
         "hardware_profile_sha256": "c" * 64,
         "hardware_id": "h",
         "source_configuration_sha256": projection_hash,
-        "source_route_configuration_sha256": "d" * 64,
+        "source_admission_group_configuration_sha256": "d" * 64,
         "source_execution_projection": projection,
         "sources": [
             {"run_id": "run", "receipt_sha256": "e" * 64, "joined_requests_sha256": "f" * 64}
