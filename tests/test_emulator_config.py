@@ -172,7 +172,7 @@ def test_empirical_binding_requires_concrete_and_matching_input_signature(tmp_pa
         "hardware_profile_sha256": hardware.sha256,
         "hardware_id": hardware.data["id"],
         "source_configuration_sha256": projection_hash,
-        "source_route_configuration_sha256": "d" * 64,
+        "source_admission_group_configuration_sha256": "d" * 64,
         "source_execution_projection": projection,
         "sources": [
             {"run_id": "source", "receipt_sha256": "e" * 64, "joined_requests_sha256": "f" * 64}
